@@ -1,0 +1,34 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ENTITY decode4to16 IS
+    PORT ( s : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4-bit input
+           En : IN STD_LOGIC;                   -- Enable input
+           OP : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) -- 16-bit output
+         );
+END decode4to16;
+
+ARCHITECTURE Behavior OF decode4to16 IS
+    SIGNAL Ens : STD_LOGIC_VECTOR(4 DOWNTO 0); -- 5-bit signal (1 enable + 4 input)
+BEGIN
+    Ens <= En & s;
+
+    WITH Ens SELECT
+        op <="0000000000000001" WHEN "10000", -- Corresponding to input 0000
+             "0000000000000010" WHEN "10001", -- Corresponding to input 0001
+             "0000000000000100" WHEN "10010", -- Corresponding to input 0010
+             "0000000000001000" WHEN "10011", -- Corresponding to input 0011
+             "0000000000010000" WHEN "10100", -- Corresponding to input 0100
+             "0000000000100000" WHEN "10101", -- Corresponding to input 0101
+             "0000000001000000" WHEN "10110", -- Corresponding to input 0110
+             "0000000010000000" WHEN "10111", -- Corresponding to input 0111
+             "0000000100000000" WHEN "11000", -- Corresponding to input 1000
+             "0000001000000000" WHEN "11001", -- Corresponding to input 1001
+             "0000010000000000" WHEN "11010", -- Corresponding to input 1010
+             "0000100000000000" WHEN "11011", -- Corresponding to input 1011
+             "0001000000000000" WHEN "11100", -- Corresponding to input 1100
+             "0010000000000000" WHEN "11101", -- Corresponding to input 1101
+             "0100000000000000" WHEN "11110", -- Corresponding to input 1110
+             "1000000000000000" WHEN "11111", -- Corresponding to input 1111
+             "0000000000000000" WHEN OTHERS; -- Default case
+END Behavior;
